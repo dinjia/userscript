@@ -192,7 +192,7 @@ var pages = [{
         var setPic = function(picLink, song) {
             if (song.al.pic_str || song.al.pic) {
                 var img = innerFrame.contentWindow.document.querySelector('.j-img');
-                picLink.href = img.dataset.src = api.getTrackURL(song.al.pic_str || song.al.pic);
+                picLink.href = img.dataset.src = api.getTrackURL(song.al.pic_str || song.al.pic)+ '.jpg';
                 img.src = img.dataset.src + '?param=130y130';
                 picLink.download = name + '.jpg';
                 dl.BindAnthor(picLink);
