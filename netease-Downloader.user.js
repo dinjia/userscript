@@ -6,7 +6,6 @@
 // @include     http*://music.163.com/*
 // @grant       unsafeWindow
 // @grant        GM_xmlhttpRequest
-// @connect       126.net
 // @namespace 
 // ==/UserScript==
 var api = {
