@@ -123,11 +123,12 @@ var pages = [{
                     api.search(songId,
                     function(result) {
                         var song = result.result.songs[0];
-                        var music = song.hMusic || song.hMusic || song.lMusic || song.bMusic;
+                        var music = song.hMusic || song.mMusic || song.lMusic || song.bMusic;
                         var mp3url;
-                        if (music && music.dfsId != 0) {
-                            mp3url = api.getTrackURL(music.dfsId) + '.mp3';
-                        } else {
+                        var dfsId=music.dfsId_str||music.dfsId;
+                        if (music && dfsId != 0) {
+                            mp3url = api.getTrackURL(dfsId) + '.mp3';
+                        } else if(!song.mp3Url.endsWith("==/0.mp3")) {
                             mp3url = song.mp3Url;
                         }
                         if (mp3url) {
