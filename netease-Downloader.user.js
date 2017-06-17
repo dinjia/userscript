@@ -226,7 +226,7 @@ var pages = [{
         function(result) {
             setLyric(lyricLink, result);
         });
-        if (!(document.cookie.contains('appsign=true'))) {
+        if (document.cookie.indexOf('appsign=true')==-1) {
                 api.sign(0, function (result) {
                     if (result.code == - 2 || result.code == 200) {
                         console.log(result);
@@ -236,7 +236,7 @@ var pages = [{
                     }
                 });
             };
-            if (!document.cookie.contains('websign=true')) {
+            if (document.cookie.indexOf('appsign=true')==-1) {
                 api.sign(1, function (result) {
                     if (result.code == - 2 || result.code == 200) {
                         console.log(result);
