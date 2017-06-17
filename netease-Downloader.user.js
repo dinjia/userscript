@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name       Netease-Downloader
 // @description  a script about netease music downloader
-// @version   201706010
+// @version   201706017
 // @author     dinjia
 // @include     http*://music.163.com/*
 // @grant       unsafeWindow
@@ -88,7 +88,14 @@ var api = {
             offset: 0,
         };
         this.encrypt_request(callback, url, data);
-    }
+    },
+    sign: function (type, callback) {
+        var url = '/weapi/point/dailyTask';
+        var data = {
+            type: type
+        };
+        this.encrypt_request(callback, url, data);
+    },
 };
 var innerFrame = document.querySelector('iframe');
 var pages = [{
@@ -219,6 +226,26 @@ var pages = [{
         function(result) {
             setLyric(lyricLink, result);
         });
+        if (!(document.cookie.contains('appsign=true'))) {
+                api.sign(0, function (result) {
+                    if (result.code == - 2 || result.code == 200) {
+                        console.log(result);
+                        var cookieime = new Date();
+                        cookieime.setTime(24 * 60 * 60 * 1000 + new Date(new Date() .toDateString()) .getTime() - 1);
+                        document.cookie = 'appsign=true;' + ';expires=' + cookieime.toGMTString();
+                    }
+                });
+            };
+            if (!document.cookie.contains('websign=true')) {
+                api.sign(1, function (result) {
+                    if (result.code == - 2 || result.code == 200) {
+                        console.log(result);
+                        var cookieime = new Date();
+                        cookieime.setTime(24 * 60 * 60 * 1000 + new Date(new Date() .toDateString()) .getTime() - 1);
+                        document.cookie = 'websign=true;' + ';expires=' + cookieime.toGMTString();
+                    }
+                });
+            };
         var container = this.createLineContainer('下载');
         container.appendChild(newMp3Link);
         container.appendChild(lyricLink);
