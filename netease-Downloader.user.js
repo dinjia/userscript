@@ -96,6 +96,20 @@ var api = {
         };
         this.encrypt_request(callback, url, data);
     },
+     xiamisearch: function (key, callback) {
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url: 'http://musicafe.co:8080/api/search/song/xiami?&limit=1&page=1&key=' + key,
+            // onload: function (response) {
+            // callback(JSON.parse(this.responseText));
+            // }
+            onreadystatechange: function (res) {
+                if (res.readyState == 4 && res.status == 200) {
+                    callback(JSON.parse(res.responseText));
+                }
+            }
+        });
+    },
 };
 var innerFrame = document.querySelector('iframe');
 var pages = [{
@@ -144,7 +158,17 @@ var pages = [{
                             mp3Link.download = name + '.mp3';
                             dl.BindAnthor(mp3Link);
                         } else {
-                            disableStyle(mp3Link);
+                           api.xiamisearch(name, function (result) {
+                                    mp3url = result.songList[0].file;
+                                    if (mp3url) {
+                                        mp3Link.href = mp3url;
+                                        mp3Link.text += '(虾米)';
+                                        mp3Link.download = name + '.mp3';
+                                        dl.BindAnthor(mp3Link);
+                                    } else {
+                                        disableStyle(mp3Link);
+                                    }
+                                });
                         }
                     });
                 }
@@ -236,7 +260,7 @@ var pages = [{
                     }
                 });
             };
-            if (document.cookie.indexOf('appsign=true')==-1) {
+            if (document.cookie.indexOf('websign=true')==-1) {
                 api.sign(1, function (result) {
                     if (result.code == - 2 || result.code == 200) {
                         console.log(result);
